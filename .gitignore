@@ -1,6 +1,6 @@
 node_modules/
 data/
-dist/
 lib/
 package-lock.json
 Note
+.awcache
