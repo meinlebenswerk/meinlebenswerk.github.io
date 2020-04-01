@@ -1,5 +1,6 @@
 # Welcome to Pandaemic!
 ![Imgae Caption](logo.svg)
+
 Pandaemic is an experiment, created due to the ongoing covid-19/SARS II pandemic, that aims to build a more intuitive understanding of infectious disease spread.
 At it's core this a rule based boid-engine with a fancy frontend ;)
 Also the whole thing i.e. dynamic HTML Generation via JS etc... has been done without any libraries... I know, this is generally considered bad practice, but I wanted to see how hard it would be to implement some commonly used practices on my own :)
