@@ -217,4 +217,10 @@ export class grapher{
     }
     this.ctx.stroke();
     }
+
+  reset(){
+    this.minVal = 0
+    this.maxVal =  1
+    this.yScale = (this.size.y - 2*this.margin) / (this.maxVal - this.minVal);
+  }
 }

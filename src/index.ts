@@ -56,8 +56,7 @@ let _initPandaemicApplication = (canvas: HTMLCanvasElement) => {
 
   // be.startRenderInterval(100)
   // setInterval(be.reset.bind(be), 1000)
-
-  _initControls(be)
+  return be
 }
 
 let _initParameterController = () => {
@@ -75,14 +74,16 @@ let _initGrapher = (canvas: HTMLCanvasElement) => {
   let ctx = initCanvas(canvas)
   if(!ctx) return
   let _grapher = new grapher(ctx)
+  return _grapher
 }
 
-let _initControls = (be: boids.boidEngine) => {
+let _initControls = (be: boids.boidEngine, gr: grapher) => {
   let btnRestart: HTMLElement|null = document.getElementById('btn_restart')
   if(btnRestart){
     btnRestart.onclick = () => {
       if(!btnRestart) return
       be.restart()
+      gr.reset()
     }
   }
 }
@@ -90,13 +91,19 @@ let _initControls = (be: boids.boidEngine) => {
 let main = () => {
   _initParameterController()
 
+  let be = null, gr = null
+
   //get the grapher canvas element
   let grapherCanvasElement: HTMLCanvasElement|null = document.getElementById('graph_canvas') as HTMLCanvasElement
-  if(grapherCanvasElement) _initGrapher(grapherCanvasElement)
+  if(grapherCanvasElement) gr = _initGrapher(grapherCanvasElement)
 
   // get the canvas element
   let canvasElement: HTMLCanvasElement|null = document.getElementById('canvas') as HTMLCanvasElement
-  if(canvasElement) _initPandaemicApplication(canvasElement)
+  if(canvasElement) be = _initPandaemicApplication(canvasElement)
+
+  if(be && gr){
+    _initControls(be, gr)
+  }
 
   /*
   for(let i=0; i<20; i++){
