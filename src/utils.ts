@@ -200,12 +200,12 @@ export class parameter {
   }
 
   setMin(val: number){
-    this.min = (this.type = parameter_type.universal_percentage)? 0 : val
+    this.min = (this.type === parameter_type.universal_percentage)? 0 : val
     this._updateHandler()
   }
 
   setMax(val: number){
-    this.max = (this.type = parameter_type.universal_percentage)? 1 : val
+    this.max = (this.type === parameter_type.universal_percentage)? 1 : val
     this._updateHandler()
   }
 
