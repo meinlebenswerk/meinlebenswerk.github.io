@@ -1,0 +1,38 @@
+{
+  "name": "pandaemic",
+  "version": "1.0.0",
+  "main": "dist/library.js",
+  "module": "lib/index.js",
+  "author": "Jan <jan.eckert@tum.de>",
+  "license": "CC-BY-4.0",
+  "config": {
+    "library": "Library",
+    "host": "localhost",
+    "port": "8080"
+  },
+  "scripts": {
+    "start": "webpack-serve webpack.config.js",
+    "build": "tsc --build",
+    "bundle": "webpack"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/preset-env": "^7.9.0",
+    "@types/node": "^10.17.18",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "prettier": "^1.16.4",
+    "source-map-loader": "^0.2.4",
+    "terser-webpack-plugin": "^2.3.5",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.1",
+    "typescript-tslint-plugin": "^0.3.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.2.3",
+    "webpack-serve": "^2.0.3",
+    "worker-loader": "^2.0.0"
+  }
+}

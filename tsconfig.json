@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": ["es2015", "dom"],
+    "outDir": "./lib/",
+    "sourceMap": false,
+    "strict": true,
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  },
+  "include": ["src", "typings"],
+  "awesomeTypescriptLoaderOptions": {
+    "reportFiles": [
+      "./src/**/*"
+    ],
+    "useTranspileModule": true,
+    "useBabel": true,
+    "babelOptions": {
+        "presets": ["es2015"],
+        "sourceMaps": true
+    },
+    "useCache": true
+  }
+}

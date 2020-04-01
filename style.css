@@ -1,0 +1,363 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+
+  width: 100%;
+  height: 100%;
+  background: #ecf2f6;
+  font-family: 'Oswald', sans-serif;
+  color: #292c2e;
+
+  overflow: hidden;
+
+  position: relative;
+}
+
+.no_select {
+  user-select: none;
+}
+
+.neumorph {
+  box-shadow: -6px -6px 26px 0 #bcc8d2, 6px 6px 16px 0 #bcc8d2;
+}
+
+.title {
+  top: 0;
+  left: 0;
+  height: 5%;
+  width: 100%;
+
+  background: #dae5ee;
+
+  font-family: 'Anton', sans-serif;
+
+  color: #292c2e;
+  line-height: 200%;
+  text-align: center | left;
+  font-size: 1.5em;
+
+  padding-left: 10%;
+
+}
+
+.application {
+  position: absolute;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 90%;
+  height: 80%;
+  background: #dae5ee;
+
+  padding: 10px;
+}
+
+.window {
+  position: absolute;
+  width: calc(100% - 20px);    /* 40px: 2 * 20px padding */
+  height: calc(80% - 20px);   /* 50px: 2 * 25px padding */
+  overflow: hidden;
+}
+
+.canvas_container {
+  width: 100%;
+  height: 100%;
+}
+
+#graph_canvas, #canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.wrap_bot{
+  position: absolute;
+
+  width: 100%;
+  max-width: 270px;
+
+  height: 10px;
+  max-height: 10px;
+
+  bottom: -10px;
+  right: 10px;
+
+  border-radius: 0.2em 0.2em 0 0;
+
+  background: #dae5ee;
+  z-index: 10;
+}
+
+.wrap_top{
+  position: absolute;
+
+  width: 100%;
+  max-width: 270px;
+
+  height: 10px;
+  max-height: 10px;
+
+  top: -10px;
+  right: 10px;
+
+  border-radius: 0 0 0.2em 0.2em;
+
+  background: #dae5ee;
+  z-index: 10;
+}
+
+.options {
+  position: absolute;
+
+  width: 100%;
+  max-width: 270px;
+
+  height: 100%;
+  max-height: 100%;
+
+  top: 0px;
+  right: 10px;
+
+  overflow-y: scroll;
+  overflow-x: visible;
+  -ms-overflow-style: none;
+
+  margin-bottom: 10px;
+  background: rgba(255, 0, 0, 0.0);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.options::-webkit-scrollbar {
+  display: none;
+}
+
+.options > div {
+  width: 75%;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  position: absolute;
+
+  border-radius: 0.2em;
+  padding: 0.2em;
+}
+
+.options > div > li {
+  all: unset;
+  display: block;
+
+  background: #e3ebf2;
+
+  margin-top: 2em;
+  margin-bottom: 2em;
+  /* border-bottom: 0.2px solid #292c2e; */
+  padding-bottom: 0.4em;
+  border-radius: 0.2em;
+
+  box-shadow: -6px -6px 26px 0 #bcc8d2, 6px 6px 16px 0 #bcc8d2;
+}
+
+
+.param_control {
+  width: 100%;
+  text-align: center;
+}
+
+.param_options{
+  margin-top: 0.2em;
+  display: inline-block;
+  margin-left: 8%;
+}
+
+.param_options > label {
+  display: block;
+  padding-left: 0.2em;
+  padding-right: 1em;
+	font-weight: bold;
+  float: left;
+}
+
+.param_options > input {
+  float: right;
+  max-width: 4em;
+  border: none;
+  text-align: right;
+  font-family: 'Oswald', sans-serif;
+  padding-right: 1em;
+
+  background: #d5e2ec;
+}
+
+.param_setpoint {
+  padding-top: 0.5em;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.param_setpoint > input {
+  width: 90%;
+}
+
+/* REMOVE NUMBER - ARROWS */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* .param_control > div > input {
+  max-width: 100px;
+  width: 5em;
+} */
+
+/* SLIDER STYLING */
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 1em;
+  width: 1em;
+  background: #686f75;
+  cursor: pointer;
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  height: 1em;
+  width: 1em;
+  background: #686f75;
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+  height: 1em;
+  width: 1em;
+  background: #686f75;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  height: 1em;
+  cursor: pointer;
+  background: #d5e2ec;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #d5e2ec;
+}
+
+input[type=range]::-moz-range-track {
+  height: 1em;
+  cursor: pointer;
+  background: #d5e2ec;
+  border-radius: 0.5em;
+}
+
+input[type=range]::-ms-track {
+  height: 1em;
+  cursor: pointer;
+  background: #d5e2ec;
+  border-radius: 0.5em;
+}
+input[type=range]::-ms-fill-lower {
+  background: #d5e2ec;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #d5e2ec;
+}
+input[type=range]::-ms-fill-upper {
+  background: #d5e2ec;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #d5e2ec;
+}
+
+
+.graph_window{
+  position: absolute;
+  bottom: 10px;
+  width: calc(100% - 20px);    /* 40px: 2 * 20px padding */
+  height: calc(20% - 20px);   /* 50px: 2 * 25px padding */
+}
+
+.button {
+  position: absolute;
+  width: 12em;
+  height: 5%;
+
+  background: #dae5ee;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all .3s ease-in-out;
+}
+
+.button:hover {
+ background: #a7b2bb;
+}
+
+.button_positive_action {
+  background: #198c19;
+  color: #e5f2e5;
+}
+.button_positive_action:hover {
+  background: #006600;
+}
+
+.button_negative_action {
+  background: #ff3232;
+  color: #e5f2e5;
+}
+.button_negative_action:hover {
+  background: #cc0000;
+}
+
+#btn_restart {
+  bottom: -5em;
+  right: 2em;
+}
