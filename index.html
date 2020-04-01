@@ -22,39 +22,49 @@
 </head>
 
 <body>
-  <div class="title | neumorph">Pandaemic</div>
-  <div class="application | neumorph">
-    <div class="window | neumorph", id="window">
-      <div class="canvas_container">
-        <canvas id="canvas"></canvas>
-      </div>
-      <div class="wrap_top">
+  <div class="site_wrapper | high_card">
+    <div class="title">Welcome to Pandaemic</div>
+    <div class="subtitle">
+      Covid-19/ SARS II has affected the world substantially and the new hot thing is social distancing. <br>
+      But how do these measures affect infection rate (and subsequently the outbreaks outcome)? <br>
+      To better understand this, I created Pandaemic, a pandemic simulator that allows you to play with a lot of parameters to build a more intuitive understanding of the underlying mechanics.
+      <br>
+      See the <a href="https://github.com/meinlebenswerk/meinlebenswerk.github.io">github page</a> for more information.
+      <br>
+    </div>
+    <div class="application">
+      <div class="window | card", id="window">
+        <div id="be_canvas_container" class="canvas_container">
+          <canvas id="canvas"></canvas>
+        </div>
+        <div class="wrap_top">
 
-      </div>
-      <div class="options">
+        </div>
+        <div class="options">
 
-        <div class="opt_container" id='p_container'>
+          <div class="opt_container" id='p_container'>
+          </div>
+        </div>
+        <div class="wrap_bot">
         </div>
       </div>
-      <div class="wrap_bot">
-      </div>
-    </div>
 
-    <div class="graph_window | neumorph">
-      <div class="canvas_container">
-        <canvas id="graph_canvas"></canvas>
+      <div class="graph_window | card">
+        <div  id="graph_canvas_container" class="canvas_container">
+          <canvas id="graph_canvas"></canvas>
+        </div>
       </div>
-    </div>
 
-    <div id="btn_restart" class="button | neumorph | button_positive_action">
-      <div class="btn_content | no_select">
-        restart Simulation
+      <div id="btn_restart" class="button | button_positive_action">
+        <div class="btn_content | no_select">
+          restart Simulation
+        </div>
       </div>
     </div>
   </div>
 
-  <script src="dist/pandaemic.min.js" charset="utf-8"></script>
-  <!-- <script src="pandaemic.js" charset="utf-8"></script> -->
+  <!-- <script src="dist/pandaemic.min.js" charset="utf-8"></script> -->
+  <script src="pandaemic.js" charset="utf-8"></script>
 </body>
 
 </html>

@@ -6,22 +6,22 @@ import { grapher } from './grapher'
 
 
 
-let initCanvas = (canvasElement: HTMLCanvasElement, callback: any|null = null) => {
+let initCanvas = (canvasElement: HTMLCanvasElement, container: HTMLElement) => {
   let canvasContext: CanvasRenderingContext2D|null = canvasElement.getContext('2d');
 
   let resizeHandler = () => {
     let h = canvasElement.clientHeight
+    canvasElement.height = h
     let w = canvasElement.clientWidth
+    canvasElement.width = w
     if(canvasContext){
       canvasContext.canvas.width  = w;
       canvasContext.canvas.height = h;
     }
-    if(callback){
-      callback
-    }
+
   }
 
-  window.addEventListener('resize', resizeHandler ,false);
+  window.addEventListener('resize', resizeHandler);
 
   resizeHandler()
 
@@ -29,7 +29,9 @@ let initCanvas = (canvasElement: HTMLCanvasElement, callback: any|null = null) =
 }
 
 let _initPandaemicApplication = (canvas: HTMLCanvasElement) => {
-  let ctx = initCanvas(canvas)
+  let container: HTMLElement|null = document.getElementById('be_canvas_container')
+  if(!container) return
+  let ctx = initCanvas(canvas, container)
   if(!ctx) return
 
   let options = new boids.boidEngineConfig()
@@ -71,7 +73,11 @@ let _initParameterController = () => {
 }
 
 let _initGrapher = (canvas: HTMLCanvasElement) => {
-  let ctx = initCanvas(canvas)
+
+  let container: HTMLElement|null = document.getElementById('graph_canvas_container')
+  if(!container) return
+
+  let ctx = initCanvas(canvas, container)
   if(!ctx) return
   let _grapher = new grapher(ctx)
   return _grapher

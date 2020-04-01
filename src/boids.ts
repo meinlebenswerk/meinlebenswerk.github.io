@@ -206,7 +206,6 @@ export class boidEngine {
 
   _render(){
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    this.ctx.beginPath();
 
     let id=0
     for(let entity of this.entities){
@@ -231,6 +230,12 @@ export class boidEngine {
       }
 
       this.ctx.fill();
+
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = '#2a4e6c'
+      this.ctx.lineWidth = 0.3;
+      this.ctx.arc(entity.position.x, entity.position.y, this.entity_size.getValue(id)/2, 0, 2 * Math.PI);
+      this.ctx.stroke();
       id ++
     }
   }

@@ -16,9 +16,9 @@ body {
 
   width: 100%;
   height: 100%;
-  background: #ecf2f6;
+  background: #ecf2f7;
   font-family: 'Oswald', sans-serif;
-  color: #292c2e;
+  color: #1c3448;
 
   overflow: hidden;
 
@@ -29,51 +29,80 @@ body {
   user-select: none;
 }
 
-.neumorph {
-  box-shadow: -6px -6px 26px 0 #bcc8d2, 6px 6px 16px 0 #bcc8d2;
+a {
+  color: #315b7d;
+  text-decoration: none;
+}
+
+.card {
+  box-shadow: 0 0 12px rgba(0,0,0,0.16);
+  border-radius: 0px;
+
+  background: #fafbfd;
+}
+
+/* .card:hover {
+  box-shadow: 0 0 35px rgba(0,0,0,0.16);
+} */
+
+.high_card {
+  box-shadow: 0 0 35px rgba(0,0,0,0.16);
+  border-radius: 0px;
+
+  background: #fafbfd;
+}
+
+.site_wrapper {
+  margin: 0 auto 0 auto;
+  width: 90%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .title {
-  top: 0;
-  left: 0;
-  height: 5%;
   width: 100%;
-
-  background: #dae5ee;
-
   font-family: 'Anton', sans-serif;
-
-  color: #292c2e;
   line-height: 200%;
   text-align: center | left;
   font-size: 1.5em;
 
+  color: #2a4e6c;
+
+  padding-top: 1em;
+  padding-left: 10%;
+
+}
+
+.subtitle {
+  width: 100%;
+
+  text-align: center | left;
+  font-size: 1em;
+
+  padding-top: 0.2em;
   padding-left: 10%;
 
 }
 
 .application {
-  position: absolute;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
+  margin-top: 1em;
 
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-rows: 60% auto;
 
-  width: 90%;
-  height: 80%;
-  background: #dae5ee;
-
-  padding: 10px;
+  width: 100%;
 }
 
 .window {
-  position: absolute;
-  width: calc(100% - 20px);    /* 40px: 2 * 20px padding */
-  height: calc(80% - 20px);   /* 50px: 2 * 25px padding */
+  position: relative;
+  margin: 0 auto;
+  width: 96%;
   overflow: hidden;
+
+  padding: 5px;
 }
 
 .canvas_container {
@@ -148,6 +177,10 @@ body {
 }
 
 .options > div {
+
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+
   width: 75%;
 
   top: 50%;
@@ -163,15 +196,14 @@ body {
   all: unset;
   display: block;
 
-  background: #e3ebf2;
+  background: #fafbfd;
 
   margin-top: 2em;
   margin-bottom: 2em;
   /* border-bottom: 0.2px solid #292c2e; */
   padding-bottom: 0.4em;
-  border-radius: 0.2em;
 
-  box-shadow: -6px -6px 26px 0 #bcc8d2, 6px 6px 16px 0 #bcc8d2;
+  box-shadow: 0 0 10px rgba(0,0,0,0.16);
 }
 
 
@@ -202,7 +234,7 @@ body {
   font-family: 'Oswald', sans-serif;
   padding-right: 1em;
 
-  background: #d5e2ec;
+  background: #c7d9e8;
 }
 
 .param_setpoint {
@@ -229,11 +261,6 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-/* .param_control > div > input {
-  max-width: 100px;
-  width: 5em;
-} */
-
 /* SLIDER STYLING */
 
 input[type=range] {
@@ -259,7 +286,7 @@ input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 1em;
   width: 1em;
-  background: #686f75;
+  background: #315b7d;
   cursor: pointer;
 }
 
@@ -267,7 +294,7 @@ input[type=range]::-webkit-slider-thumb {
 input[type=range]::-moz-range-thumb {
   height: 1em;
   width: 1em;
-  background: #686f75;
+  background: #315b7d;
   cursor: pointer;
 }
 
@@ -275,7 +302,7 @@ input[type=range]::-moz-range-thumb {
 input[type=range]::-ms-thumb {
   height: 1em;
   width: 1em;
-  background: #686f75;
+  background: #315b7d;
   cursor: pointer;
 }
 
@@ -317,16 +344,19 @@ input[type=range]:focus::-ms-fill-upper {
 
 
 .graph_window{
-  position: absolute;
-  bottom: 10px;
-  width: calc(100% - 20px);    /* 40px: 2 * 20px padding */
-  height: calc(20% - 20px);   /* 50px: 2 * 25px padding */
+  position: relative;
+  margin: 2em auto;
+
+  width: 98%;
+  height: 20vh;
+
+  overflow: hidden;
 }
 
 .button {
   position: absolute;
   width: 12em;
-  height: 5%;
+  height: 3em;
 
   background: #dae5ee;
   border-radius: 5px;
@@ -335,18 +365,21 @@ input[type=range]:focus::-ms-fill-upper {
   justify-content: center;
   align-items: center;
   transition: all .3s ease-in-out;
+
+  box-shadow: 0 0 5px rgba(0,0,0,0.16);
 }
 
 .button:hover {
  background: #a7b2bb;
+ box-shadow: 0 0 35px rgba(0,0,0,0.16);
 }
 
 .button_positive_action {
-  background: #198c19;
+  background: #386890;
   color: #e5f2e5;
 }
 .button_positive_action:hover {
-  background: #006600;
+  background: #2a4e6c;
 }
 
 .button_negative_action {
@@ -358,6 +391,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 #btn_restart {
-  bottom: -5em;
-  right: 2em;
+  position: absolute;
+  right: 4em;
+  bottom: max(1em, 5vh);
 }
