@@ -72,6 +72,7 @@ a {
   color: #2a4e6c;
 
   padding-top: 1em;
+  margin-top: 3em;
   padding-left: 10%;
 
 }
@@ -347,7 +348,7 @@ input[type=range]:focus::-ms-fill-upper {
   position: relative;
   margin: 2em auto;
 
-  width: 98%;
+  width: 96%;
   height: 20vh;
 
   overflow: hidden;
@@ -392,6 +393,6 @@ input[type=range]:focus::-ms-fill-upper {
 
 #btn_restart {
   position: absolute;
-  right: 4em;
-  bottom: max(1em, 5vh);
+  right: max(3em, 6vw);
+  bottom: max(1em, 4vh);
 }
