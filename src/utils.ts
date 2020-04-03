@@ -251,6 +251,16 @@ export class ruler {
     return ruler.element.offsetWidth
   }
 
+  static checkHeight(str: string, fontStyle: string){
+    if(!ruler.element){
+      ruler._getElement()
+    }
+    if(!ruler.element) return 0
+    ruler.element.style.font = fontStyle
+    ruler.element.innerHTML = str
+    return ruler.element.offsetHeight
+  }
+
   static _getElement(){
     // document.write('<span id="ruler"></span>')
     ruler.element = document.createElement('span') as HTMLElement

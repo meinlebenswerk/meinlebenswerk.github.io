@@ -86,6 +86,7 @@ a {
 }
 
 .application {
+  position: relative;
   padding-top: 1em;
 
   display: grid;
@@ -94,7 +95,7 @@ a {
   width: 100%;
   flex: 1 1;
 
-  padding-bottom: 5em;
+  margin-bottom: 5em;
 
   min-height: 0;
   min-width: 0;
@@ -363,6 +364,6 @@ input[type=range]:focus::-ms-fill-upper {
 
 #btn_restart {
   position: absolute;
-  right: max(3em, 6vw);
-  bottom: max(1em, 4vh);
+  right: max(3em, 3vw);
+  bottom: -3em;
 }

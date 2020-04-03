@@ -91,6 +91,7 @@ export class grapher{
   varNameSizePx: number = 25
 
   legendSize: number = 50
+  legendMarkerHeight: number = 0
   nRows = 4
 
   dataChanged: boolean = true
@@ -157,6 +158,9 @@ export class grapher{
     this.varNamesWidthPx = maxSizePx + 2*this.colorDotSizePx
 
     this.legendSize = 2 * ruler.checkLength(this.maxVal.toFixed(1), fontStyle)
+    this.legendMarkerHeight = ruler.checkHeight(this.maxVal.toFixed(1), fontStyle)
+
+    this.yScale = (this.size.y - 2*this.margin - this.legendMarkerHeight) / (this.maxVal - this.minVal)
   }
 
   varAddedListener(_var: graphedVariable){
@@ -206,12 +210,12 @@ export class grapher{
 
     let idx = 0
     let offset = this.size.y - graphedVariable.getGraphedVariables().length * this.varNameSizePx
-    offset = offset / 2
+    offset = (offset / 2) + this.margin/2
     for (let _var of graphedVariable.variableList){
       this.ctx.fillStyle = _var.color
       // this.ctx.fillText(_var.name, this.margin, 20);
       this.ctx.fillStyle = '#292c2e'
-      let y = offset + this.margin + idx*this.varNameSizePx
+      let y = offset + idx*this.varNameSizePx
       this.ctx.fillText(_var.name, this.margin + this.legendSize, y);
       this.ctx.fillStyle = _var.color
       this.ctx.beginPath();
