@@ -110,7 +110,7 @@ export class boidEngine {
   }
 
   boidStateUpdateHandler(entity: boid, state: sickness_state){
-    console.log(`boid #${entity.id} state is now: ${state}`)
+    // console.log(`boid #${entity.id} state is now: ${state}`)
     if(state === sickness_state.deceased){
       //console.log 'removing boid'
       this.entitiesToBeRemoved.push(entity)
