@@ -238,3 +238,24 @@ export class parameter {
   }
 
 }
+
+export class ruler {
+  static element: HTMLElement|null
+  static checkLength(str: string, fontStyle: string){
+    if(!ruler.element){
+      ruler._getElement()
+    }
+    if(!ruler.element) return 0
+    ruler.element.style.font = fontStyle
+    ruler.element.innerHTML = str
+    return ruler.element.offsetWidth
+  }
+
+  static _getElement(){
+    // document.write('<span id="ruler"></span>')
+    ruler.element = document.createElement('span') as HTMLElement
+    document.body.appendChild(ruler.element)
+    ruler.element.style.visibility = 'hidden'
+    ruler.element.style.whiteSpace = 'nowrap'
+  }
+}

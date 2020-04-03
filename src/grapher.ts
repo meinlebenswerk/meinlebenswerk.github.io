@@ -1,4 +1,4 @@
-import { vec2 } from './utils'
+import { vec2, ruler } from './utils'
 import { EventEmitter } from 'events'
 
 type timerHandle = number;
@@ -73,6 +73,7 @@ export class grapher{
   values: number[][]
   ctx: CanvasRenderingContext2D
   size: vec2
+  sizeChanged: boolean = false
 
   maxVal: number
   minVal: number
@@ -81,8 +82,13 @@ export class grapher{
   xScale: number
   yScale: number
   stepSize: number
-  margin: number
+  margin: number = 10
   rowSize: number
+
+  varNamesWidthPx: number = 0
+  fontSizePt: number = 10
+  colorDotSizePx: number = 4
+  varNameSizePx: number = 25
 
   legendSize: number = 50
   nRows = 4
@@ -104,12 +110,12 @@ export class grapher{
 
     this.size = new vec2(width, height)
     graphedVariable.on('variableUpdated', this.varUpdatedListener.bind(this))
+    graphedVariable.on('paramAdded', this.varAddedListener.bind(this))
 
     // set these values for your data
     let sections = 12;
     this.stepSize = 40;
     this.rowSize = 50;
-    this.margin = 10;
 
     this.yScale = (this.size.y - 2*this.margin) / (this.maxVal - this.minVal);
     this.xScale = (this.size.x - this.rowSize) / sections;
@@ -118,6 +124,8 @@ export class grapher{
 
     this.redrawLegend()
     window.addEventListener('resize', () => setTimeout(this.resizeEvent.bind(this), 10))
+
+    this._updateLengendSizing()
   }
 
   resizeEvent(){
@@ -126,16 +134,45 @@ export class grapher{
 
     this.size = new vec2(width, height)
     this.yScale = (this.size.y - 2*this.margin) / (this.maxVal - this.minVal);
+    this.sizeChanged = true
+    this._updateLengendSizing()
+  }
+
+  _updateLengendSizing(){
+
+    let fontsize_px = this.size.y / 13
+    this.fontSizePt = fontsize_px*0.75
+    let fontStyle = `${this.fontSizePt.toFixed(1)}pt Oswald`
+
+    this.varNameSizePx = fontsize_px * 1.5
+    this.colorDotSizePx = Math.min(4, this.varNameSizePx/3)
+
+
+    let maxSizePx = 0
+    for (let _var of graphedVariable.variableList){
+      let nameSizePx = ruler.checkLength(_var.name + 'aa', fontStyle)
+      maxSizePx = Math.max(maxSizePx, nameSizePx)
+      // console.log(_var.name + '=>' + nameSizePx)
+    }
+    this.varNamesWidthPx = maxSizePx + 2*this.colorDotSizePx
+
+    this.legendSize = 2 * ruler.checkLength(this.maxVal.toFixed(1), fontStyle)
+  }
+
+  varAddedListener(_var: graphedVariable){
+    this._updateLengendSizing()
   }
 
   varUpdatedListener(newval: number, _var: any): void {
     if(newval < this.minVal){
       this.minVal = newval
       this.boundsChanged = true
+      this._updateLengendSizing()
     }
     if(newval > this.maxVal){
       this.maxVal = newval
       this.boundsChanged = true
+      this._updateLengendSizing()
     }
     this.dataChanged = true
   }
@@ -164,7 +201,24 @@ export class grapher{
 
   redrawLegend(){
     this.ctx.fillStyle = "#997f89"
-    this.ctx.font = '10pt Oswald'
+    this.ctx.font = `${this.fontSizePt.toFixed(1)}pt Oswald`
+    // this.ctx.font = '10pt Oswald'
+
+    let idx = 0
+    let offset = this.size.y - graphedVariable.getGraphedVariables().length * this.varNameSizePx
+    offset = offset / 2
+    for (let _var of graphedVariable.variableList){
+      this.ctx.fillStyle = _var.color
+      // this.ctx.fillText(_var.name, this.margin, 20);
+      this.ctx.fillStyle = '#292c2e'
+      let y = offset + this.margin + idx*this.varNameSizePx
+      this.ctx.fillText(_var.name, this.margin + this.legendSize, y);
+      this.ctx.fillStyle = _var.color
+      this.ctx.beginPath();
+      this.ctx.arc(this.margin - 8 + this.legendSize,  y - 4, this.colorDotSizePx, 0, 2 * Math.PI, false);
+      this.ctx.fill()
+      idx ++
+    }
 
     let stepSize = (this.maxVal - this.minVal) / this.nRows
     // print row header and draw horizontal grid lines
@@ -174,26 +228,11 @@ export class grapher{
       var y = this.margin + (this.yScale * count * stepSize);
 
       this.ctx.fillText(scale.toFixed(1), this.margin, y + this.margin/2);
-      this.ctx.moveTo(this.legendSize + 90 ,y)
+      this.ctx.moveTo(this.legendSize + this.varNamesWidthPx ,y)
       this.ctx.lineTo(this.size.x - this.margin,y)
       count++;
     }
     this.ctx.stroke();
-
-    let idx = 0
-    let offset = (this.size.y - 2*this.margin) - graphedVariable.getGraphedVariables().length * 25
-    for (let _var of graphedVariable.variableList){
-      this.ctx.fillStyle = _var.color
-      // this.ctx.fillText(_var.name, this.margin, 20);
-      this.ctx.fillStyle = '#292c2e'
-      let y = offset + this.margin + idx*25
-      this.ctx.fillText(_var.name, this.margin + this.legendSize, y);
-      this.ctx.fillStyle = _var.color
-      this.ctx.beginPath();
-      this.ctx.arc(this.margin - 8 + this.legendSize,  y - 4, 4, 0, 2 * Math.PI, false);
-      this.ctx.fill()
-      idx ++
-    }
   }
 
   plotAllGraphVariables(){
