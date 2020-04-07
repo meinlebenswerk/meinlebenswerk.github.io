@@ -266,6 +266,8 @@ export class ruler {
     ruler.element = document.createElement('span') as HTMLElement
     document.body.appendChild(ruler.element)
     ruler.element.style.visibility = 'hidden'
+    ruler.element.style.position = 'absolute'
+    ruler.element.style.top = '0'
     ruler.element.style.whiteSpace = 'nowrap'
   }
 }

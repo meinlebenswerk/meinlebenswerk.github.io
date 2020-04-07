@@ -1,5 +1,6 @@
 import { vec2, ruler } from './utils'
 import { EventEmitter } from 'events'
+import { AppColors }  from './color'
 
 type timerHandle = number;
 
@@ -142,6 +143,7 @@ export class grapher{
   _updateLengendSizing(){
 
     let fontsize_px = this.size.y / 13
+    fontsize_px *= 0.85
     this.fontSizePt = fontsize_px*0.75
     let fontStyle = `${this.fontSizePt.toFixed(1)}pt Oswald`
 
@@ -159,8 +161,6 @@ export class grapher{
 
     this.legendSize = 2 * ruler.checkLength(this.maxVal.toFixed(1), fontStyle)
     this.legendMarkerHeight = ruler.checkHeight(this.maxVal.toFixed(1), fontStyle)
-
-    this.yScale = (this.size.y - 2*this.margin - this.legendMarkerHeight) / (this.maxVal - this.minVal)
   }
 
   varAddedListener(_var: graphedVariable){
@@ -204,17 +204,17 @@ export class grapher{
   }
 
   redrawLegend(){
-    this.ctx.fillStyle = "#997f89"
+    this.ctx.fillStyle = AppColors.fontColor
     this.ctx.font = `${this.fontSizePt.toFixed(1)}pt Oswald`
     // this.ctx.font = '10pt Oswald'
 
     let idx = 0
     let offset = this.size.y - graphedVariable.getGraphedVariables().length * this.varNameSizePx
-    offset = (offset / 2) + this.margin/2
-    for (let _var of graphedVariable.variableList){
+    offset = (offset / 2) + this.margin
+    for (let _var of graphedVariable.getGraphedVariables()){
       this.ctx.fillStyle = _var.color
       // this.ctx.fillText(_var.name, this.margin, 20);
-      this.ctx.fillStyle = '#292c2e'
+      this.ctx.fillStyle = AppColors.fontColor
       let y = offset + idx*this.varNameSizePx
       this.ctx.fillText(_var.name, this.margin + this.legendSize, y);
       this.ctx.fillStyle = _var.color
@@ -227,14 +227,17 @@ export class grapher{
     let stepSize = (this.maxVal - this.minVal) / this.nRows
     // print row header and draw horizontal grid lines
     var count =  0;
-    this.ctx.strokeStyle="#997f89"; // color of grid lines
-    for (let scale=this.maxVal; scale>=this.minVal; scale = scale - stepSize) {
-      var y = this.margin + (this.yScale * count * stepSize);
+    this.ctx.strokeStyle = AppColors.fontColor
+    this.ctx.fillStyle = AppColors.fontColor
 
-      this.ctx.fillText(scale.toFixed(1), this.margin, y + this.margin/2);
-      this.ctx.moveTo(this.legendSize + this.varNamesWidthPx ,y)
+    let steps = 4
+    let ySize = (this.size.y - 2*this.margin)
+    for(let i=0;i<=steps;i++){
+      let y = this.margin + ySize * (i/steps)
+      let scale = this.minVal + (this.maxVal - this.minVal) * (1 - i/steps)
+      this.ctx.fillText(scale.toFixed(1), this.margin, y + this.legendMarkerHeight/4);
+      this.ctx.moveTo(this.legendSize + this.varNamesWidthPx, y)
       this.ctx.lineTo(this.size.x - this.margin,y)
-      count++;
     }
     this.ctx.stroke();
   }

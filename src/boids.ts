@@ -1,6 +1,7 @@
 import { vec2, rect, parameter, parameter_type } from "./utils";
 import { boidRule, distanceAccelerator, distanceElement} from './boidRules'
-import { sickness, sickness_state } from './pandemic'
+import { immune_system, immune_system_state } from './pandemic'
+import { AppColors } from './color'
 
 import { graphedVariable } from './grapher'
 
@@ -85,11 +86,11 @@ export class boidEngine {
       this.startUpdateInterval(frametime)
       this.updateInterval = frametime;
     }
-    this.gv_EntitiesAlive = graphedVariable.getGraphVariableByNameOrCreate('Entites Alive', '#198c19')
-    this.gv_EntitiesInfected = graphedVariable.getGraphVariableByNameOrCreate('Entites Infected' , '#73e500')
-    this.gv_EntitiesSick = graphedVariable.getGraphVariableByNameOrCreate('Entites Sick', '#ff4c4c')
-    this.gv_EntitesImmune = graphedVariable.getGraphVariableByNameOrCreate('Entites Immune', '#004c00')
-    this.gv_EntitiesDead = graphedVariable.getGraphVariableByNameOrCreate('Entities Dead', '#b20000')
+    this.gv_EntitiesAlive = graphedVariable.getGraphVariableByNameOrCreate('Entities Alive', AppColors.healthy)
+    this.gv_EntitiesInfected = graphedVariable.getGraphVariableByNameOrCreate('Entities Infected' , AppColors.infected)
+    this.gv_EntitiesSick = graphedVariable.getGraphVariableByNameOrCreate('Entities Sick', AppColors.sick)
+    this.gv_EntitesImmune = graphedVariable.getGraphVariableByNameOrCreate('Entities Immune', AppColors.immune)
+    this.gv_EntitiesDead = graphedVariable.getGraphVariableByNameOrCreate('Entities Dead', AppColors.dead)
 
     window.addEventListener('resize', () => setTimeout(this.resizeEvent.bind(this), 10))
   }
@@ -106,12 +107,12 @@ export class boidEngine {
 
   infectOne(){
     let idx = Math.floor(this.entities.length * Math.random())
-    this.entities[idx].setImmuneSystemState(sickness_state.incubating)
+    this.entities[idx].setImmuneSystemState(immune_system_state.incubating)
   }
 
-  boidStateUpdateHandler(entity: boid, state: sickness_state){
+  boidStateUpdateHandler(entity: boid, state: immune_system_state){
     // console.log(`boid #${entity.id} state is now: ${state}`)
-    if(state === sickness_state.deceased){
+    if(state === immune_system_state.deceased){
       //console.log 'removing boid'
       this.entitiesToBeRemoved.push(entity)
     }
@@ -212,27 +213,27 @@ export class boidEngine {
       this.ctx.beginPath();
       this.ctx.arc(entity.position.x, entity.position.y, this.entity_size.getValue(id)/2, 0, 2 * Math.PI, false);
       switch(entity.immuneState){
-        case sickness_state.cured:
-        this.ctx.fillStyle = '#004c00';
+        case immune_system_state.immune:
+        this.ctx.fillStyle = AppColors.immune;
         break;
 
-        case sickness_state.healthy:
-        this.ctx.fillStyle = '#198c19';
+        case immune_system_state.healthy:
+        this.ctx.fillStyle = AppColors.healthy;
         break;
 
-        case sickness_state.incubating:
-        this.ctx.fillStyle = '#ffff7f';
+        case immune_system_state.incubating:
+        this.ctx.fillStyle = AppColors.infected;
         break;
 
-        case sickness_state.sick:
-        this.ctx.fillStyle = '#ff4c4c';
+        case immune_system_state.sick:
+        this.ctx.fillStyle = AppColors.sick;
         break;
       }
 
       this.ctx.fill();
 
       this.ctx.beginPath();
-      this.ctx.strokeStyle = '#2a4e6c'
+      this.ctx.strokeStyle = AppColors.outline
       this.ctx.lineWidth = 0.3;
       this.ctx.arc(entity.position.x, entity.position.y, this.entity_size.getValue(id)/2, 0, 2 * Math.PI);
       this.ctx.stroke();
@@ -250,13 +251,13 @@ export class boidEngine {
 
     for(let ent of this.entities){
       switch(ent.immuneState){
-        case sickness_state.cured:
+        case immune_system_state.immune:
           nImmune ++
           break;
-        case sickness_state.incubating:
+        case immune_system_state.incubating:
           nInfected ++
           break;
-        case sickness_state.sick:
+        case immune_system_state.sick:
           nSick ++
           break;
       }
@@ -348,7 +349,7 @@ export class boid {
   acceleration: parameter
   speed: parameter
 
-  infection: sickness
+  immuneSystem: immune_system
   ImmuneSystemStateUpdateHandler: any | null
 
   constructor(pos: vec2 = new vec2(), size:parameter, id:number=0) {
@@ -361,7 +362,7 @@ export class boid {
     this.acceleration = parameter.getParameterByNameOrCreate('Entity Acceleration', parameter_type.universal, 15, 25)
     this.speed = parameter.getParameterByNameOrCreate('Entity Speed', parameter_type.universal, 15, 20)
 
-    this.infection = new sickness()
+    this.immuneSystem = new immune_system()
   }
 
   update(diff: number, entities:boid[], distanceMatrix:distanceElement[][], rules: boidRule[]){
@@ -384,15 +385,15 @@ export class boid {
 
     this.position = this._resolveCollisions(new_position, walk_dir, entities)
 
-    this.infection.update(diff)
+    this.immuneSystem.update(diff)
   }
 
   inVirusVicinity(){
-    this.infection.inVirusVicinity()
+    this.immuneSystem.inVirusVicinity()
   }
 
-  setImmuneSystemState(state: sickness_state){
-    this.infection.state = state
+  setImmuneSystemState(state: immune_system_state){
+    this.immuneSystem.state = state
   }
 
   // TODO move this to the engine :)
@@ -423,11 +424,11 @@ export class boid {
   }
 
   get immuneState(){
-    return this.infection.state
+    return this.immuneSystem.state
   }
 
   set onImmuneSystemStateUpdated(callback: any){
-    this.infection.onStateUpdated = callback
+    this.immuneSystem.onStateUpdated = callback
   }
 
 }

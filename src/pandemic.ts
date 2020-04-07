@@ -1,21 +1,21 @@
 import { parameter, parameter_type } from './utils'
 
-export enum sickness_state {
+export enum immune_system_state {
   healthy,
   incubating,
   sick,
   deceased,
-  cured
+  immune
 }
 
-export class sickness {
+export class immune_system {
   mortality_rate: parameter
   infection_rate: parameter
   incubation_time: parameter
   healing_time: parameter
   immune_time: parameter
 
-  _state: sickness_state
+  _state: immune_system_state
   timer: number;
 
   onStateUpdated: any|null;
@@ -27,17 +27,17 @@ export class sickness {
     this.healing_time = parameter.getParameterByNameOrCreate('Healing Time', parameter_type.universal, 0, 100)
     this.immune_time = parameter.getParameterByNameOrCreate('Immune Time', parameter_type.universal, 0, 100)
 
-    this._state = sickness_state.healthy
+    this._state = immune_system_state.healthy
     this.timer = 0
   }
 
   makeSick(){
-    if(this.state !== sickness_state.deceased){
-      this.state = sickness_state.sick;
+    if(this.state !== immune_system_state.deceased){
+      this.state = immune_system_state.sick;
     }
   }
 
-  set state(newstate: sickness_state){
+  set state(newstate: immune_system_state){
     this._state = newstate
     if(this.onStateUpdated) this.onStateUpdated(this._state)
   }
@@ -48,35 +48,35 @@ export class sickness {
 
   update(diff: number){
     switch(this.state){
-      case sickness_state.healthy:
+      case immune_system_state.healthy:
         // do nothing :)
       break;
-      case sickness_state.incubating:
+      case immune_system_state.incubating:
         this.timer += diff
         if(this.timer > this.incubation_time.getValue()*1000){
-          this.state = sickness_state.sick
+          this.state = immune_system_state.sick
           this.timer = 0
         }
       break;
-      case sickness_state.sick:
+      case immune_system_state.sick:
         this.timer += diff
         if(this.timer > this.healing_time.getValue()*1000){
           let rnd = Math.random()
           if(rnd > this.mortality_rate.getValue()){
-            this.state = sickness_state.healthy
+            this.state = immune_system_state.immune
           }else{
-            this.state = sickness_state.deceased
+            this.state = immune_system_state.deceased
           }
           this.timer = 0
         }
       break;
-      case sickness_state.deceased:
+      case immune_system_state.deceased:
         // can't do anything :)
       break;
-      case sickness_state.cured:
+      case immune_system_state.immune:
         this.timer += diff
         if(this.timer > this.immune_time.getValue()*1000){
-          this.state = sickness_state.healthy
+          this.state = immune_system_state.healthy
           this.timer = 0
         }
       break;
@@ -84,14 +84,14 @@ export class sickness {
   }
 
   get infectable() {
-    return this._state === sickness_state.healthy
+    return this._state === immune_system_state.healthy
   }
 
   inVirusVicinity(){
     if(!this.infectable) return
     let _rnd = Math.random()
     if(_rnd <= this.infection_rate.getValue()){
-      this.state = sickness_state.incubating
+      this.state = immune_system_state.incubating
     }
   }
 

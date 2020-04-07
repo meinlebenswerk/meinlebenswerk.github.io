@@ -3,8 +3,12 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css?family=Anton|Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Lobster&family=Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
   <title>Pandaemic</title>
   <link rel="icon" type="image/svg" href="logo.svg">
@@ -22,49 +26,67 @@
 </head>
 
 <body>
-  <div class="site_wrapper | high_card">
-    <div class="title">Welcome to Pandaemic</div>
+  <div class="site_wrapper">
+    <div class="title">
+      <div>
+        Pandaemic
+      </div>
+    </div>
     <div class="subtitle">
       Covid-19/ SARS II has affected the world substantially and the new hot thing is social distancing. <br>
       But how do these measures affect infection rate (and subsequently the outbreaks outcome)? <br>
       To better understand this, I created Pandaemic, a pandemic simulator that allows you to play with a lot of parameters to build a more intuitive understanding of the underlying mechanics.
       <br>
+      All times are measured in seconds, and dead entities are removed from the simulation.
+      For The best experience, open this page on a desktop browser/ large screen device.
+      <br>
       See the <a href="https://github.com/meinlebenswerk/meinlebenswerk.github.io">github page</a> for more information.
       <br>
     </div>
-    <div class="application">
-      <div class="window | card", id="window">
-        <div id="be_canvas_container" class="canvas_container">
-          <canvas id="canvas"></canvas>
-        </div>
-        <div class="wrap_top">
 
-        </div>
-        <div class="options">
-
-          <div class="opt_container" id='p_container'>
-          </div>
-        </div>
-        <div class="wrap_bot">
-        </div>
-      </div>
-
-      <div class="graph_window | card">
-        <div  id="graph_canvas_container" class="canvas_container">
-          <canvas id="graph_canvas"></canvas>
-        </div>
-      </div>
-
-      <div id="btn_restart" class="button | button_positive_action">
-        <div class="btn_content | no_select">
-          restart Simulation
-        </div>
+    <div class="placeholder">
+      <div class="inner_placeholder">
+        <span id="scroll_ico" class="material-icons">
+        keyboard_arrow_down
+        </span>
       </div>
     </div>
+
+    <div class="main_window | card", id="window">
+      <div id="be_canvas_container" class="canvas_container">
+        <canvas id="canvas"></canvas>
+      </div>
+      <div class="wrap_top">
+
+      </div>
+      <div class="options">
+
+        <div class="opt_container" id='p_container'>
+        </div>
+      </div>
+      <div class="wrap_bot">
+      </div>
+    </div>
+
+    <div class="graph_window | card">
+      <div  id="graph_canvas_container" class="canvas_container">
+        <canvas id="graph_canvas"></canvas>
+      </div>
+    </div>
+
+    <div id="btn_restart" class="button | button_positive_action">
+      <div id="restart_text" class="btn_content | no_select">
+        restart Simulation
+      </div>
+      <span class="material-icons">
+      replay
+      </span>
+    </div>
+
   </div>
 
-  <script src="dist/pandaemic.min.js" charset="utf-8"></script>
-  <!-- <script src="pandaemic.js" charset="utf-8"></script> -->
+  <!-- <script src="dist/pandaemic.min.js" charset="utf-8"></script> -->
+  <script src="pandaemic.js" charset="utf-8"></script>
 </body>
 
 </html>

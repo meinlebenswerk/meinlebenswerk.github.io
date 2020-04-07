@@ -1,6 +1,6 @@
 import { boid } from './boids'
 import { vec2, rect, parameter, parameter_type } from './utils'
-import { sickness, sickness_state } from './pandemic'
+import { immune_system, immune_system_state } from './pandemic'
 
 export class distanceElement{
   dist: number = 0
@@ -49,7 +49,7 @@ export class boidRule {
     let weightParamNormal = parameter.getParameterByNameOrCreate(`${this.ruleName} weight`)
     let weightParamSick = parameter.getParameterByNameOrCreate(`${this.ruleName} weight (sick)`)
 
-    let weightParam = (entity.immuneState === sickness_state.sick)? weightParamSick : weightParamNormal
+    let weightParam = (entity.immuneState === immune_system_state.sick)? weightParamSick : weightParamNormal
     return dir.scl(weightParam.getValue(entity.id))
   }
 
@@ -155,7 +155,7 @@ export class sicknessRule extends boidRule{
 
     let nEntities: number = distanceMatrix.length
 
-    let infecting = entity.infection.state === sickness_state.incubating || entity.infection.state === sickness_state.sick
+    let infecting = entity.immuneState === immune_system_state.incubating || entity.immuneState === immune_system_state.sick
 
     let infectionDistance = this.infection_distance.getValue()
 
