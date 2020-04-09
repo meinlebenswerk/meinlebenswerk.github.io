@@ -6,7 +6,7 @@ import { grapher } from './grapher'
 
 
 
-let initCanvas = (canvasElement: HTMLCanvasElement, container: HTMLElement) => {
+let initCanvas = (canvasElement: HTMLCanvasElement, container: HTMLElement, enableSuperresolution: boolean = false) => {
   let canvasContext: CanvasRenderingContext2D|null = canvasElement.getContext('2d');
 
   let resizeHandler = () => {
@@ -14,9 +14,12 @@ let initCanvas = (canvasElement: HTMLCanvasElement, container: HTMLElement) => {
     let w = canvasElement.clientWidth
 
     // Experimental oversize handler, for mobile
-    if(h < 400 || w < 400){
-      h = h*2
-      w = w*2
+    if(enableSuperresolution){
+      if(h < 300 || w < 300){
+        h = h*2
+        w = w*2
+      }
+
     }
 
     if(canvasContext){
@@ -82,7 +85,7 @@ let _initGrapher = (canvas: HTMLCanvasElement) => {
   let container: HTMLElement|null = document.getElementById('graph_canvas_container')
   if(!container) return
 
-  let ctx = initCanvas(canvas, container)
+  let ctx = initCanvas(canvas, container, true)
   if(!ctx) return
   let _grapher = new grapher(ctx)
   return _grapher

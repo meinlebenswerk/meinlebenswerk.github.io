@@ -457,6 +457,10 @@ input[type=range]:focus::-ms-fill-upper {
     max-width: 30vw;
   }
 
+  .options > div {
+    width: 100%;
+  }
+
   .param_options > label {
     margin: 0 auto 0 auto;
     float: left;
