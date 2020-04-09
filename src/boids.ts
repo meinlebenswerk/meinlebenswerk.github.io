@@ -221,6 +221,8 @@ export class boidEngine {
 
     let id=0
     for(let entity of this.entities){
+
+      if(entity.immuneState === immune_system_state.removed) continue;
       this.ctx.beginPath();
       this.ctx.arc(entity.position.x, entity.position.y, this.entity_size.getValue(id)/2, 0, 2 * Math.PI, false);
       switch(entity.immuneState){
@@ -239,6 +241,10 @@ export class boidEngine {
         case immune_system_state.sick:
         this.ctx.fillStyle = AppColors.sick;
         break;
+
+        case immune_system_state.deceased:
+        this.ctx.fillStyle = AppColors.dead;
+        break;
       }
 
       this.ctx.fill();
@@ -254,7 +260,6 @@ export class boidEngine {
 
   _updateGraphData(){
     let nEntitesMax = this.nEntities.getValue()
-    let nAlive: number = this.entities.length
     let nInfected: number = 0
     let nSick: number = 0
     let nImmune: number = 0
@@ -271,8 +276,13 @@ export class boidEngine {
         case immune_system_state.sick:
           nSick ++
           break;
+        case immune_system_state.deceased:
+          nDead ++
+          break;
       }
     }
+
+    let nAlive: number = this.entities.length - nDead
 
     this.gv_EntitiesAlive.appendValue(nAlive)
     this.gv_EntitiesInfected.appendValue(nInfected)
@@ -289,9 +299,11 @@ export class boidEngine {
     }
 
     if(this.entities.length > 0) this._updateGraphData();
+    /*
     for(let ent of this.entitiesToBeRemoved){
       this.entities.splice(this.entities.indexOf(ent), 1)
     }
+    */
     this.entitiesToBeRemoved = []
     //console.log('stepping panda')
     let diff = this.updateInterval;
@@ -377,6 +389,11 @@ export class boid {
   }
 
   update(diff: number, entities:boid[], distanceMatrix:distanceElement[][], rules: boidRule[]){
+    if(this.immuneState === immune_system_state.removed) return
+    if(this.immuneState === immune_system_state.deceased){
+      this.immuneSystem.update(diff)
+      return
+    }
     let walk_dir = new vec2()
 
     for(let idx=0; idx < rules.length; idx ++){

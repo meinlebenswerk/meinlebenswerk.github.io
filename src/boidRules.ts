@@ -73,13 +73,23 @@ export class socialRule extends boidRule{
     let rule_dir = new vec2()
     for(let i:number=0; i<nEntities; i++){
       let _entity = entities[i]
+
+      //skip removed entities.
+      if(_entity.immuneState === immune_system_state.removed) continue;
       if(entity === _entity) continue
-      //let distEl = distanceMatrix[entity.id][i]
-      let dist = entity.position.sub(_entity.position)
-      if(dist.len() < viewDistance){
+
+
+
+      let distEl = distanceMatrix[entity.id][i]
+      // let dist = entity.position.sub(_entity.position)
+      let dist = distEl.vec;
+      if(distEl.dist < viewDistance){
         // if(dist <= this.entity_size.getValue(id)*1.2) continue
         rule_dir = rule_dir.add(dist.fn((e:number) => 1/e))
       }
+
+      // avoid dead people lol
+      if(entity.immuneState === immune_system_state.deceased) rule_dir = rule_dir.scl(-1);
     }
     return rule_dir.norm()
   }
@@ -123,10 +133,13 @@ export class avoidanceRule extends boidRule{
     // TODO extract this into new method.
     for(let i=0; i<nEntities; i++){
       let _entity = entities[i]
+      //skip removed entities.
+      if(_entity.immuneState === immune_system_state.removed) continue;
       if(entity === _entity) continue
-      //let distEl = distanceMatrix[entity.id][i]
-      let dist = _entity.position.sub(entity.position)
-      if(dist.len() < avoidanceDistance){
+      let distEl = distanceMatrix[entity.id][i]
+      // let dist = _entity.position.sub(entity.position)
+      let dist = distEl.vec
+      if(distEl.dist < avoidanceDistance){
         rule_dir = rule_dir.add(dist.fn((e:number) => 100 * 1/e))
       }
     }
@@ -144,7 +157,7 @@ export class sicknessRule extends boidRule{
 
   constructor(){
     super('sicknessRule')
-    this.infection_distance = parameter.getParameterByNameOrCreate('Infection Distance', parameter_type.universal, 10, 15, 'Distance below which infections can occur.')
+    this.infection_distance = parameter.getParameterByNameOrCreate('Infection Distance', parameter_type.universal, 10, 15, 'Distance in pixels below which infections can occur.')
   }
 
   weightRule(dir: vec2, entity: boid): vec2{
@@ -155,19 +168,22 @@ export class sicknessRule extends boidRule{
 
     let nEntities: number = distanceMatrix.length
 
-    let infecting = entity.immuneState === immune_system_state.incubating || entity.immuneState === immune_system_state.sick
+    let infecting = entity.immuneState === immune_system_state.incubating || entity.immuneState === immune_system_state.sick || entity.immuneState === immune_system_state.deceased
 
     let infectionDistance = this.infection_distance.getValue()
 
     // TODO extract this into new method.
     for(let i=0; i<nEntities; i++){
       let _entity = entities[i]
+      //skip removed entities.
+      if(_entity.immuneState === immune_system_state.removed) continue;
       if(entity === _entity) continue
-      //let distEl = distanceMatrix[entity.id][i]
-      let dist = entity.position.sub(_entity.position)
+      let distEl = distanceMatrix[entity.id][i]
+      // let dist = entity.position.sub(_entity.position)
+      let dist = distEl.vec
 
       // let distEl: distanceElement = distanceMatrix[id][i]
-      if(dist.len() < infectionDistance && infecting){
+      if(distEl.dist < infectionDistance && infecting){
         // possibly infect the other boid...
         let otherEntity = entities[i]
         otherEntity.inVirusVicinity()
