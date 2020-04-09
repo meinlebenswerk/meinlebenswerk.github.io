@@ -144,7 +144,10 @@ export class grapher{
 
     let fontsize_px = this.size.y / 13
     fontsize_px *= 0.85
-    this.fontSizePt = fontsize_px*0.75
+    this.fontSizePt = fontsize_px * 0.75
+    this.fontSizePt = Math.min(this.fontSizePt, 12)
+    
+    fontsize_px = this.fontSizePt / 0.75
     let fontStyle = `${this.fontSizePt.toFixed(1)}pt Oswald`
 
     this.varNameSizePx = fontsize_px * 1.5
