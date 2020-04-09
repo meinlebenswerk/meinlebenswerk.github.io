@@ -41,6 +41,7 @@ export class boidEngine {
   updateInterval: number = 0;
 
   entitiesToInfect: parameter
+  entitiesToImmunize: parameter
 
   rules: boidRule[] = []
 
@@ -66,6 +67,7 @@ export class boidEngine {
     this.entity_size.registerDependency(this._parameterUpdateHandler.bind(this))
 
     this.entitiesToInfect = parameter.getParameterByNameOrCreate('# Infected at Start', parameter_type.universal, 0, 10)
+    this.entitiesToImmunize = parameter.getParameterByNameOrCreate('# Immune at Start', parameter_type.universal, 0, 10)
 
     this.continuum = options.continuum
 
@@ -110,6 +112,12 @@ export class boidEngine {
     this.entities[idx].setImmuneSystemState(immune_system_state.incubating)
   }
 
+  immunizeOne(){
+    let idx = Math.floor(this.entities.length * Math.random())
+    this.entities[idx].setImmuneSystemState(immune_system_state.immune)
+  }
+
+
   boidStateUpdateHandler(entity: boid, state: immune_system_state){
     // console.log(`boid #${entity.id} state is now: ${state}`)
     if(state === immune_system_state.deceased){
@@ -139,6 +147,9 @@ export class boidEngine {
     }
     for(let i =0; i<this.entitiesToInfect.getValue(); i++){
       this.infectOne()
+    }
+    for(let i =0; i<this.entitiesToImmunize.getValue(); i++){
+      this.immunizeOne()
     }
   }
 
