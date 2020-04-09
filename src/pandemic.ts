@@ -5,6 +5,7 @@ export enum immune_system_state {
   incubating,
   sick,
   deceased,
+  removed,
   immune
 }
 
@@ -21,8 +22,8 @@ export class immune_system {
   onStateUpdated: any|null;
 
   constructor(){
-    this.mortality_rate = parameter.getParameterByNameOrCreate('Mortality Rate', parameter_type.universal_percentage, 0, 1, 'Chance to die/heal, when the healing time is over')
-    this.infection_rate = parameter.getParameterByNameOrCreate('Infection Rate', parameter_type.universal_percentage, 0, 1, 'Chance that the entity will become infected when in the vicinity of another sick/infected entity')
+    this.mortality_rate = parameter.getParameterByNameOrCreate('Mortality Rate', parameter_type.universal_percentage, 0, 1, 'probability to die instead of becoming immune, when the healing time is over')
+    this.infection_rate = parameter.getParameterByNameOrCreate('Infection Rate', parameter_type.universal_percentage, 0, 1, 'probability that the entity will become infected when in the vicinity of another sick/infected entity')
     this.incubation_time = parameter.getParameterByNameOrCreate('Incubation Time', parameter_type.universal, 0, 100, 'Time in seconds the virus takes to show symptoms (=change from infected to sick)')
     this.healing_time = parameter.getParameterByNameOrCreate('Healing Time', parameter_type.universal, 0, 100, 'Time in seconds an infected Entity takes to heal/die.')
     this.immune_time = parameter.getParameterByNameOrCreate('Immune Time', parameter_type.universal, 0, 100, 'Time in seconds a healed Entity is immune for.')
@@ -71,7 +72,11 @@ export class immune_system {
         }
       break;
       case immune_system_state.deceased:
-        // can't do anything :)
+        this.timer += diff
+        if(this.timer > 5000){
+          this.timer = 0;
+          this.state = immune_system_state.removed
+        }
       break;
       case immune_system_state.immune:
         this.timer += diff
@@ -79,6 +84,8 @@ export class immune_system {
           this.state = immune_system_state.healthy
           this.timer = 0
         }
+      break;
+      case immune_system_state.removed:
       break;
     }
   }

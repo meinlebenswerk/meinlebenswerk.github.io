@@ -12,6 +12,7 @@ export class ParameterControl {
     this.controller = controller
     this.controlledParameter = param
     this.createUIElement()
+    this.loadFromLocalStorage()
     this.attachListeners()
   }
 
@@ -85,15 +86,53 @@ export class ParameterControl {
     this.controller.addUIElement(listElem)
   }
 
+  loadFromLocalStorage(){
+    let item = localStorage.getItem(this.controlledParameter.name)
+    if(!item) return;
+
+    let param = JSON.parse(item)
+
+    //update the parameter
+    this.controlledParameter.setMin(param.min)
+    this.controlledParameter.setMax(param.max)
+    this.controlledParameter.setValue(param.value)
+
+
+    //resync the UI
+    if(this.minElement){
+      this.minElement.value = param.min + ''
+    }
+
+    if(this.maxElement){
+      this.maxElement.value = param.max + ''
+    }
+
+    if(this.valueSlider){
+      this.valueSlider.value = '' + 1000*param.value/(param.max - param.min)
+    }
+  }
+
+  saveParameterLocally(){
+    localStorage.setItem(this.controlledParameter.name, JSON.stringify(this.controlledParameter));
+  }
+
   attachListeners(){
     if(this.minElement){
       let _el: HTMLInputElement = this.minElement
-      this.minElement.onchange = () => { this.controlledParameter.setMin(parseInt(_el.value)) }
+      this.minElement.onchange = () => {
+        this.controlledParameter.setMin(parseInt(_el.value))
+        this.saveParameterLocally()
+      }
+      this.saveParameterLocally()
     }
 
     if(this.maxElement){
       let _el: HTMLInputElement = this.maxElement
-      this.maxElement.onchange = () => { this.controlledParameter.setMax(parseInt(_el.value)) }
+      this.maxElement.onchange = () => {
+        this.controlledParameter.setMax(parseInt(_el.value))
+        this.saveParameterLocally()
+      }
+
     }
 
     if(this.valueSlider){
@@ -103,6 +142,7 @@ export class ParameterControl {
         val *= this.controlledParameter.max - this.controlledParameter.min
         val += this.controlledParameter.min
         this.controlledParameter.setValue(val)
+        this.saveParameterLocally()
        }
     }
   }
