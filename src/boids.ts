@@ -58,11 +58,11 @@ export class boidEngine {
   constructor(ctx: CanvasRenderingContext2D, options: boidEngineConfig = new boidEngineConfig()){
     this.ctx = ctx
 
-    this.nEntities = new parameter(10, options.maxEntities, parameter_type.universal, 'nEntities')
+    this.nEntities = new parameter(10, options.maxEntities, parameter_type.universal, 'nEntities', null, 'Number of Entities to simulate.')
     this.nEntities.registerDependency(this._parameterUpdateHandler.bind(this))
 
     let eps = parameter.getParameterByName('EntitySize')
-    this.entity_size = (eps)? eps :  new parameter(options.minEntitySize, options.maxEntitySize, parameter_type.entity_scoped, 'EntitySize')
+    this.entity_size = (eps)? eps :  new parameter(options.minEntitySize, options.maxEntitySize, parameter_type.entity_scoped, 'EntitySize', null, 'Entity size in pixels')
     this.entity_size.registerDependency(this._parameterUpdateHandler.bind(this))
 
     this.entitiesToInfect = parameter.getParameterByNameOrCreate('# Infected at Start', parameter_type.universal, 0, 10)
@@ -359,8 +359,8 @@ export class boid {
 
     this.id = id
 
-    this.acceleration = parameter.getParameterByNameOrCreate('Entity Acceleration', parameter_type.universal, 15, 25)
-    this.speed = parameter.getParameterByNameOrCreate('Entity Speed', parameter_type.universal, 15, 20)
+    this.acceleration = parameter.getParameterByNameOrCreate('Entity Acceleration', parameter_type.universal, 15, 25, 'Entity Acceleration in pixels/tick² (one tick = ~1/25s)')
+    this.speed = parameter.getParameterByNameOrCreate('Entity Speed', parameter_type.universal, 15, 20, 'Entity Speed in pixels/tick (one tick = ~1/25s)')
 
     this.immuneSystem = new immune_system()
   }

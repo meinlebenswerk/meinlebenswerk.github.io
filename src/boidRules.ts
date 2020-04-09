@@ -46,8 +46,8 @@ export class boidRule {
   }
 
   weightRule(dir: vec2, entity: boid): vec2{
-    let weightParamNormal = parameter.getParameterByNameOrCreate(`${this.ruleName} weight`)
-    let weightParamSick = parameter.getParameterByNameOrCreate(`${this.ruleName} weight (sick)`)
+    let weightParamNormal = parameter.getParameterByNameOrCreate(`${this.ruleName} weight`, parameter_type.entity_scoped, 0, 1, `Weight applied to the decision of the ${this.ruleName}, if the Entity is not experiencing symptons (=healthy, immune, infected)`)
+    let weightParamSick = parameter.getParameterByNameOrCreate(`${this.ruleName} weight (sick)`, parameter_type.entity_scoped, 0, 1, `Weight applied to the decision of the ${this.ruleName}, if the Entity is experiencing symptons (=sick)`)
 
     let weightParam = (entity.immuneState === immune_system_state.sick)? weightParamSick : weightParamNormal
     return dir.scl(weightParam.getValue(entity.id))
@@ -62,8 +62,8 @@ export class socialRule extends boidRule{
 
   constructor(){
     super('SocialRule')
-    this.view_distance = parameter.getParameterByNameOrCreate('View Distance', parameter_type.universal, 10, 30)
-    this.entity_size = parameter.getParameterByNameOrCreate('EntitySize', parameter_type.universal, 4, 8)
+    this.view_distance = parameter.getParameterByNameOrCreate('Grouping Distance', parameter_type.universal, 10, 30, 'Distance in pixels below which Entities will spot another and move towards one each other.')
+    this.entity_size = parameter.getParameterByNameOrCreate('EntitySize', parameter_type.universal, 4, 8, 'Entity Size in pixels')
   }
 
   executeRule(entity: boid, entities: boid[], distanceMatrix:distanceElement[][]): vec2 {
@@ -109,7 +109,7 @@ export class avoidanceRule extends boidRule{
   constructor(){
     super('avoidanceRule')
 
-    this.avoidance_distance = parameter.getParameterByNameOrCreate('Avoidance Distance', parameter_type.universal, 10, 30)
+    this.avoidance_distance = parameter.getParameterByNameOrCreate('Avoidance Distance', parameter_type.universal, 10, 30, 'Distance in pixels below which Entities will spot another and move away from each other.')
 
   }
 
@@ -144,7 +144,7 @@ export class sicknessRule extends boidRule{
 
   constructor(){
     super('sicknessRule')
-    this.infection_distance = parameter.getParameterByNameOrCreate('Infection Distance', parameter_type.universal, 10, 15)
+    this.infection_distance = parameter.getParameterByNameOrCreate('Infection Distance', parameter_type.universal, 10, 15, 'Distance below which infections can occur.')
   }
 
   weightRule(dir: vec2, entity: boid): vec2{

@@ -102,6 +102,7 @@ export class parameter {
   max: number
   type: parameter_type
   name: string
+  help: string|null
 
   value: number
   _values: number[]
@@ -110,7 +111,7 @@ export class parameter {
 
   n: parameter|null
 
-  constructor(min: number, max:number, type: parameter_type, name: string = 'none', nparam: parameter|null = null){
+  constructor(min: number, max:number, type: parameter_type, name: string = 'none', nparam: parameter|null = null, help:string|null=null){
     if(type === parameter_type.universal_percentage){
       // ignore min / max assignment
       this.min = 0
@@ -122,6 +123,7 @@ export class parameter {
 
     this.type = type
     this.name = name
+    this.help = help
 
     this.n = nparam || parameter.getParameterByName('nEntities')
 
@@ -224,10 +226,10 @@ export class parameter {
     return this.getParametersByName(name)[0]
   }
 
-  static getParameterByNameOrCreate(name: string, type:parameter_type=parameter_type.entity_scoped, min:number=0, max:number= 1): parameter{
+  static getParameterByNameOrCreate(name: string, type:parameter_type=parameter_type.entity_scoped, min:number=0, max:number= 1, help: string|null=null): parameter{
     let _param = this.getParametersByName(name)[0]
     if(!_param){
-      _param = new parameter(min, max, type, name)
+      _param = new parameter(min, max, type, name, null, help)
     }
 
     return _param

@@ -18,9 +18,21 @@ export class ParameterControl {
   createUIElement(){
     let listElem = document.createElement('li');
     listElem.className = ''
+
+    let param_name = document.createElement('div')
+    param_name.className = 'param_name | no_select'
+    param_name.innerText = this.controlledParameter.name
+    listElem.appendChild(param_name)
+
     let param_ctrl = document.createElement('div')
     param_ctrl.className = 'param_options | no_select'
-    param_ctrl.innerText = this.controlledParameter.name + '\n'
+    //param_ctrl.innerText = this.controlledParameter.name + '\n'
+
+    // Help tooltip:
+    if(this.controlledParameter.help){
+      param_name.className = 'param_name | no_select | has_help'
+      param_name.innerHTML = `${this.controlledParameter.name}<p>${this.controlledParameter.help}</p>`
+    }
 
     if(this.controlledParameter.type === parameter_type.entity_scoped ||
        this.controlledParameter.type === parameter_type.universal){
