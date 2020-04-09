@@ -11,9 +11,14 @@ let initCanvas = (canvasElement: HTMLCanvasElement, container: HTMLElement) => {
 
   let resizeHandler = () => {
     let h = canvasElement.clientHeight
-    canvasElement.height = h
     let w = canvasElement.clientWidth
-    canvasElement.width = w
+
+    // Experimental oversize handler, for mobile
+    if(h < 400 || w < 400){
+      h = h*2
+      w = w*2
+    }
+
     if(canvasContext){
       canvasContext.canvas.width  = w;
       canvasContext.canvas.height = h;
