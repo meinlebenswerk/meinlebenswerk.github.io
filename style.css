@@ -193,6 +193,13 @@ a {
   display: none;
 }
 
+/*Hide scrollbar on ff?*/
+@-moz-document url-prefix() { /* Disable scrollbar Firefox */
+  .options{
+    scrollbar-width: none;
+  }
+}
+
 .options > div {
 
   -webkit-transform: translateZ(0);
